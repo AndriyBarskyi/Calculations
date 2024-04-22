@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "Calculations/Calculator";
+
+message CreateRequest {
+  float firstNumber = 1;
+  float secondNumber = 2;
+}
+
+message CreateResponse {
+  int64 additionResult = 1;
+  float divisionResult = 2;
+}
+
+service Calculator {
+  rpc Create(CreateRequest) returns (CreateResponse);
+}
