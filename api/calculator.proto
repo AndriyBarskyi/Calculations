@@ -4,24 +4,15 @@ package Calculations;
 option go_package = "Calculations/calculator";
 
 service Calculator {
-  rpc Add(AddRequest) returns (AddResponse);
-  rpc Divide(DivideRequest) returns (DivideResponse);
+  rpc Calculate(CalculateRequest) returns (CalculateResponse);
 }
 
-message AddRequest {
+message CalculateRequest {
   double a = 1;
   double b = 2;
 }
 
-message AddResponse {
-  double result = 1;
-}
-
-message DivideRequest {
-  double a = 1;
-  double b = 2;
-}
-
-message DivideResponse {
-  double result = 1;
+message CalculateResponse {
+  double multiplyResult = 1;
+  double divideResult = 2;
 }
