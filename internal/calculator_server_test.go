@@ -3,6 +3,7 @@ package internal
 import (
 	"Calculations/api"
 	"context"
+	"go.uber.org/zap"
 	"testing"
 )
 
@@ -43,6 +44,10 @@ func TestCalculatorServer_Add(t *testing.T) {
 
 func TestCalculatorServer_Divide(t *testing.T) {
 	server := &CalculatorServer{}
+	logger, err := zap.NewProduction()
+	if err != nil {
+		t.Fatalf("Failed to create logger: %v", err)
+	}
 
 	testCases := []struct {
 		name        string
@@ -70,13 +75,16 @@ func TestCalculatorServer_Divide(t *testing.T) {
 			resp, err := server.Divide(context.Background(), req)
 			if tc.expectError {
 				if err == nil {
+					logger.Error("Divide did not return an error when expected", zap.Float64("A", tc.a), zap.Float64("B", tc.b))
 					t.Errorf("Divide(%v, %v) did not return an error when expected", tc.a, tc.b)
 				}
 			} else {
 				if err != nil {
+					logger.Error("Error in Divide", zap.Error(err))
 					t.Fatalf("Divide returned an error: %v", err)
 				}
 				if resp.Result != tc.expected {
+					logger.Error("Incorrect result in Divide", zap.Float64("Got", resp.Result), zap.Float64("Expected", tc.expected))
 					t.Errorf("Divide(%v, %v) returned incorrect result: got %v, want %v", tc.a, tc.b, resp.Result, tc.expected)
 				}
 			}
